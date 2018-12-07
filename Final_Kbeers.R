@@ -2,3 +2,4 @@
 #NCBI GDS1667
 library(GEOquery)
 getGEOSuppFiles("GSE3292")
+gsd <- getGEO("GSE3292", GSEMatrix = TRUE)
