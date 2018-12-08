@@ -16,7 +16,7 @@ dat <-data.frame(MA$M)
 #create column names
 test <- MA[["targets"]][["sample"]]
 test2 <-MA[['targets']][["infection"]]
-colnames(dat)<- c(paste(test,test2, 1:29))
+colnames(dat)<- c(paste(test,test2))
 #create rownames
 rn <- MA$genes$ID
 row.names(dat)<- rn
