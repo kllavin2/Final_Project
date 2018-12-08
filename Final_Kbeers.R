@@ -3,11 +3,17 @@
 #annotation file GPL570
 library(Biobase)
 library(GEOquery)
-gds <- getGEO(filename = "GDS1667_full.soft.gz")
-# get annotation file
-gpl <- getGEO(filename = "GPL570.annot")
-# Transform the object into an expression set object
-
-
-
-
+gds <- getGEO("GDS1667")
+# Convert to expression set
+eset <- GDS2eSet(gds, do.log2 = TRUE)
+#get sample names
+smp <- sampleNames(eset)
+#get gene annotation information
+gpl <- getGEO(filename="GPL570.annot.gz")
+#create a datatable 
+MA <- GDS2MA(gds, GPL = gpl)
+dat <-data.frame(MA$M)
+#create rownames
+rn <- MA$genes$ID
+row.names(dat)<- rn
+#find outliers
