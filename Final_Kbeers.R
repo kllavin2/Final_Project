@@ -1,15 +1,15 @@
-#Get the data set for Reference series GSE3292
-#NCBI GDS1667
-#annotation file GPL570
+#Get the data set for Reference series GSE6631
+#NCBI GDS2520
+#annotation file GPL8300
 library(Biobase)
 library(GEOquery)
-gds <- getGEO("GDS1667")
+gds <- getGEO("GDS2520")
 # Convert to expression set
 eset <- GDS2eSet(gds, do.log2 = TRUE)
 #get sample names
 smp <- sampleNames(eset)
 #get gene annotation information
-gpl <- getGEO(filename="GPL570.annot.gz")
+gpl <- getGEO("GPL8300")
 #create a datatable 
 MA <- GDS2MA(gds, GPL = gpl)
 dat <-data.frame(MA$M)
