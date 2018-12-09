@@ -14,26 +14,33 @@ gpl <- getGEO("GPL8300")
 MA <- GDS2MA(gds, GPL = gpl)
 dat <-data.frame(MA$M)
 #create column names
-test <- MA[["targets"]][["sample"]]
-test2 <-MA[['targets']][["infection"]]
-colnames(dat)<- c(paste(test,test2))
+nm <- MA[["targets"]][["sample"]]
+ds <-MA[['targets']][["disease.state"]]
+ds<-revalue(ds, c("head and neck squamous carcinoma"="carcinoma", "normal"="normal"))
+colnames(dat)<- c(paste(ds,nm))
 #create rownames
 rn <- MA$genes$ID
 row.names(dat)<- rn
+nrm <- dat[c(1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43)]
+carc <-dat[c(2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44)]
+dat <-cbind(nrm,carc)
+
 #find outliers
 #correlation plot
 library(gplots)
+#calculate correlation
 dat.cor <- cor(dat)
 dat.cor <-as.matrix(dat.cor)
+#set layout
 layout(matrix(c(1,1,1,1,1,1,1,1,2,2), 5, 2, byrow = TRUE))
 par(oma=c(5,7,1,1))
 
 cx <- rev(colorpanel(25,"blue","white","red"))
 leg <- seq(min(dat.cor,na.rm=T),max(dat.cor,na.rm=T),length=10)
 
-image(dat.cor,main="Correlation plot of HPV Pos and HPV Neg samples",axes=F,col=cx)
-axis(1,at=seq(0,1,length=ncol(dat.cor)),label=dimnames(dat.cor)[[2]],cex.axis=0.9,las=2)
-axis(2,at=seq(0,1,length=ncol(dat.cor)),label=dimnames(dat.cor)[[2]],cex.axis=0.9,las=2)
+image(dat.cor,main="Correlation plot of HNSC Normal Vs Carcinoma Samples",axes=F,col=cx)
+axis(1,at=seq(0,1,length=ncol(dat.cor)),label=dimnames(dat.cor)[[2]],cex.axis=0.75,las=2)
+axis(2,at=seq(0,1,length=ncol(dat.cor)),label=dimnames(dat.cor)[[2]],cex.axis=0.75,las=2)
 
 image(as.matrix(leg),col=cx,axes=F)
 tmp <- round(leg,2)
@@ -43,12 +50,12 @@ axis(1,at=seq(0,1,length=length(leg)),labels=tmp,cex.axis=1)
 
 #Hierarchial Clustering
 #transpose the data
-dat.t <- t(dat)
+#dat.t <- t(dat)
 #get pairwise distance
-dat.dist <- dist(dat.t)
+#dat.dist <- dist(dat.t)
 #calculate and plot
-par(mar = rep(2, 4))
-plot(hclust(dat.dist), 
-     labels= dimnames(dat)[[2]], 
-     main="Hierarchical Clustering Dendrogram of HPV Pos and NEG Tumors",
-     cex.main= 0.75)
+#par(mar = rep(2, 4))
+#plot(hclust(dat.dist), 
+#     labels= dimnames(dat)[[2]], 
+#     main="Hierarchical Clustering Dendrogram of HPV Pos and NEG Tumors",
+#     cex.main= 0.75)
