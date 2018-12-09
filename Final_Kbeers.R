@@ -59,17 +59,6 @@ image(as.matrix(leg),
 tmp <- round(leg,2)
 axis(1,at=seq(0,1,length=length(leg)),
      labels=tmp,cex.axis=1)
-#PCA
-
-
-#Hierarchial Clustering
-#transpose the data
-#dat.t <- t(dat)
-#get pairwise distance
-#dat.dist <- dist(dat.t)
-#calculate and plot
-#par(mar = rep(2, 4))
-#plot(hclust(dat.dist), 
-#     labels= dimnames(dat)[[2]], 
-#     main="Hierarchical Clustering Dendrogram of HPV Pos and NEG Tumors",
-#     cex.main= 0.75)
+#Outliers: GSM153813, GSM153834, and GSM153826
+#Remove these outliers from the data set
+dat <-dat[,-c(1,29,33)] 
