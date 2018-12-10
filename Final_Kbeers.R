@@ -111,6 +111,7 @@ abline(v=seq(0.5,21.5,1),col="grey")
 #Remove these outliers from the data set
 dat.out <- dat[-c(1,33,29)]
 #look at distribution of the data
+#look at this again http://www.cureffi.org/2013/08/23/gene-expression-analysis-qc-pipeline-in-r/
 ddat <-as.numeric(as.matrix((dat.out)))
 
 hist(ddat, breaks = 100, 
