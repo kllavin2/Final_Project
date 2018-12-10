@@ -33,12 +33,13 @@ library(gplots)
 dat.cor <- cor(dat)
 dat.cor <-as.matrix(dat.cor)
 #set layout
+dev.off()
 layout(matrix(c(1,1,1,1,1,1,1,1,2,2),
               5, 
               2, 
               byrow = TRUE))
 par(oma=c(5,7,1,1))
-
+#correlation plot
 cx <- rev(colorpanel(25,
                      "blue","white","red"))
 leg <- seq(min(dat.cor,na.rm=T),
@@ -59,6 +60,64 @@ image(as.matrix(leg),
 tmp <- round(leg,2)
 axis(1,at=seq(0,1,length=length(leg)),
      labels=tmp,cex.axis=1)
+#hierarchical clustering plot
+#transpose the data
+dat.t <- t(dat)
+#get pairwise distances
+dat.dist <-dist(dat.t)
+#calculate and plot hierarchial tree
+plot(hclust(dat.dist),
+     labels = dimnames(dat)[[2]],
+     main = "Hierarchial Clustering Dendrogram of HNSC Carcinoma and Normal Samples",
+     cex.main= 0.6)
+dat.mean <- apply(dat,2,mean)
+#calculate sample standard deviations
+dat.sd <- apply(dat,2,sd)
+#calculate cv of samples
+dat.cv <- dat.sd/dat.mean
+#create cv plot
+plot(dat.mean,
+     dat.cv,
+     main="HNSC Carcinoma/Normal-Sample CV vs. Mean",
+     xlab="Mean",
+     ylab="CV",
+     col='blue',
+     cex=0.75,
+     type="n")
+text(dat.mean,
+     dat.cv,
+     label=dimnames(dat)[[2]],
+     cex=0.5)
+
+# average correlation plot
+dat.avg <- apply(dat.cor,1,mean)
+par(oma=c(6,0.1,0.1,0.1))
+plot(c(1,length(dat.avg)),
+     range(dat.avg),
+     type="n",
+     xlab="",
+     ylab="Avg r",
+     main="Avg correlation of HNSC Carcinoma and normal samples",
+     axes=F)
+points(dat.avg,
+       bg="red",
+       col=1,
+       pch=21,
+       cex=1.5)
+axis(1,at=c(1:length(dat.avg)),labels=dimnames(dat)[[2]],las=2,cex=0.5)
+axis(2)
+abline(v=seq(0.5,21.5,1),col="grey")
 #Outliers: GSM153813, GSM153834, and GSM153826
 #Remove these outliers from the data set
-dat <-dat[,-c(1,29,33)] 
+dato <- dat[-c(1,33,29)]
+
+#look at distribution of the data
+ddat <-as.numeric(unlist((dato)))
+hist(ddat, breaks = 100, 
+     col="green", 
+     main = "Histogram of expression levels",
+     xlab = "Expression Level")
+     
+#rowmeans of data
+#rwavg <- rowMeans(dat)
+
