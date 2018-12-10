@@ -109,15 +109,18 @@ axis(2)
 abline(v=seq(0.5,21.5,1),col="grey")
 #Outliers: GSM153813, GSM153834, and GSM153826
 #Remove these outliers from the data set
-dato <- dat[-c(1,33,29)]
-
+dat.out <- dat[-c(1,33,29)]
 #look at distribution of the data
-ddat <-as.numeric(unlist((dato)))
+ddat <-as.numeric(as.matrix((dat.out)))
+
 hist(ddat, breaks = 100, 
      col="green", 
      main = "Histogram of expression levels",
      xlab = "Expression Level")
      
+#Find the upper quartile
+group <- as.numeric(ddat>quantile(as.numeric(as.matrix(ddat)),0.75))
+expgrp <- data.frame(dat.out[,-1],group)
 #rowmeans of data
-#rwavg <- rowMeans(dat)
+rwavg <- rowMeans(dat)
 
